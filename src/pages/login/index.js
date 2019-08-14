@@ -2,7 +2,7 @@ import React,{ Component } from 'react';
 import {Form,Input,Icon,Button,message} from 'antd';
 //import { Router } from 'react-router-dom';
 
-import logo from './logo.png';
+import logo from '../../assets/images/logo.png';
 import { reqLogin } from '../../api';
 import data from '../../utils/store';
 import { setItem } from '../../utils/storege';
