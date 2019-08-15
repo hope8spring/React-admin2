@@ -5,26 +5,26 @@ import data from '../../utils/store';
 import { getItem } from '../../utils/storege';
 import { reqValidateUser, } from '../../api';
 
-import {message,Spin, Layout, Menu, Breadcrumb, Icon } from 'antd';
+import {message,Spin, Layout, Menu, Breadcrumb } from 'antd';
 import logo from '../../assets/images/logo.png';
+
+import LeftNav from '../../component/left-nav/index'
 
 import './index.less';
 
 const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
-const { Item } = Menu;
-
-
-
 
 export default class Admin extends Component{
 
 
   state = {
-    isLoading:true
+    isLoading:true,
+    collapsed:false,
+    idDisplay: "block"
+
   };
 
-
+//检测用户是否登录
 checkUserLogin=()=>{
 
   if(!data.user._id){
@@ -50,90 +50,30 @@ checkUserLogin=()=>{
     return false;
   }
 };
+
+  onCollapse = (collapsed) =>{
+    this.setState({
+      collapsed,
+      idDisplay:collapsed? 'none' : 'block'
+    })
+  };
+
   render(){
    // console.log('user', data.user);
     //判断内存有没有数据
     const isLoading=this.checkUserLogin();
+
+    const { idDisplay,collapsed } =this.state;
     if(isLoading) return <Spin tip="Loading..." size='large'/>;
 
-    const path = this.props.location.pathname;
 
     return<Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+      <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
         <Link to="/home" className="admin-logo" >
           <img src={logo} alt="logo"/>
-          <h1>硅谷后台</h1>
+          <h1 style = {{display:idDisplay}}>硅谷后台</h1>
         </Link>
-        <Menu theme="dark" defaultSelectedKeys={[path]} mode="inline">
-          <Item key="/home">
-            <Link to="/home">
-             <Icon type="home" />
-            <span>首页</span>
-            </Link>
-          </Item>
-          <SubMenu
-            key="2"
-            title={
-              <span>
-                  <Icon type="appstore" />
-                  <span>商品</span>
-                </span>
-            }
-          >
-            <Item key="/category">
-              <Link to="/category">
-              <Icon type="bars" />
-              <span>品类管理</span>
-              </Link>
-            </Item>
-            <Item key="/product">
-              <Link to="/product">
-              <Icon type="tool" />
-              <span>商品管理</span>
-              </Link>
-            </Item>
-          </SubMenu>
-          <Item key="/user">
-            <Link to="/user">
-            <Icon type="user" />
-            <span>用户管理</span>
-            </Link>
-          </Item>
-          <Item key="/role">
-            <Link to="/role">
-              <Icon type="safety" />
-              <span>权限管理</span>
-            </Link>
-          </Item>
-          <SubMenu
-            key="5"
-            title={
-              <span>
-                  <Icon type="area-chart" />
-                  <span>图形图表</span>
-                </span>
-            }
-          >
-            <Item key="/chart-bar">
-              <Link to="/chart-bar">
-                <Icon type="bar-chart" />
-                <span>柱形图</span>
-              </Link>
-            </Item>
-            <Item key="/chart-line">
-              <Link to="/chart-line">
-                <Icon type="line-chart" />
-                <span>折线图</span>
-              </Link>
-            </Item>
-            <Item key="/chart-pie">
-              <Link to="/chart-pie">
-                <Icon type="pie-chart" />
-                <span>饼图</span>
-              </Link>
-            </Item>
-          </SubMenu>
-        </Menu>
+        <LeftNav/>
       </Sider>
       <Layout>
         <Header style={{ background: '#fff', padding: 0 }} />
